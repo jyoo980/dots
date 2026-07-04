@@ -12,6 +12,9 @@
         ("BLOCKED" . "red")
         ("DONE" . "green")))
 
+;; Set up org-agenda-files
+(setq org-agenda-files '("~/.org/"))
+
 (defun my/count-org-todos ()
   "Count not-done TODO entries across `org-agenda-files'.
 Reports a per-file breakdown and a total in the echo area."
