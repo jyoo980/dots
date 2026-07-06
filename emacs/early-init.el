@@ -61,7 +61,7 @@
 (use-package doom-themes
   :demand
   :config
-  (load-theme 'doom-tomorrow-day t))
+  (load-theme 'modus-operandi t))
 
 (use-package which-key
   :demand
@@ -109,9 +109,18 @@
     "<escape>" #'transient-quit-one))
 
 (use-package diff-hl
+  :demand
   :init
   (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
   :config
   (global-diff-hl-mode))
 
+(use-package pdf-tools
+  :ensure t
+  :config
+  (pdf-tools-install))
+
+(use-package eglot
+  :straight nil          ; built-in — don't let straight try to fetch it
+  :hook ((c-mode c-ts-mode python-mode python-ts-mode) . eglot-ensure))
