@@ -35,6 +35,13 @@
     (find-file "~/.org/misc.org")
     (select-window original)))
 
+(defun my/vterm-docker-detach ()
+  "Send C-p C-q to the terminal (Docker detatch)"
+  (interactive)
+  (vterm-send-key "p" nil nil t)
+  (vterm-send-key "q" nil nil t))
+(defalias 'ddt #'my/vterm-docker-detach)
+
 (add-hook 'emacs-startup-hook #'my/startup-vterm-split)
 
 (provide 'vterm-init)

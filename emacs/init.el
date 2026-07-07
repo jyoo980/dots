@@ -4,6 +4,15 @@
 (setq use-file-dialog nil)     ; Ask for textual confirmation instead of GUI
 (setq-default fill-column 80)  ; Columns should be set to 80
 
+
+(defvar my/autosave-dir (expand-file-name "autosave/" user-emacs-directory))
+(make-directory my/autosave-dir t)
+(setq
+   auto-save-list-file-prefix my/autosave-dir
+   auto-save-file-name-transforms `((".*" ,my/autosave-dir t))
+   backup-directory-alist `((".*" ,my/autosave-dir t))
+   lock-file-name-transforms `((".*" ,my/autosave-dir t)))
+
 ;; Local configuration modules live in ~/.emacs.d/lisp, which might include subdirectories.
 ;; Add the directory to `load-path' once, then `require' each module by name.
 
@@ -23,3 +32,4 @@
 (require 'vterm-init)
 (require 'windows)
 (require 'python-init)
+
