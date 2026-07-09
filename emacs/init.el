@@ -2,7 +2,7 @@
 (scroll-bar-mode -1)           ; Hide the always-visible scrollbar
 (setq inhibit-splash-screen t) ; Remove the "Welcome to GNU Emacs" splash screen
 (setq use-file-dialog nil)     ; Ask for textual confirmation instead of GUI
-(setq-default fill-column 80)  ; Columns should be set to 80
+(setq-default fill-column 80)          ; Columns should be set to 80
 
 
 (defvar my/autosave-dir (expand-file-name "autosave/" user-emacs-directory))
@@ -23,13 +23,13 @@
     (when (file-directory-p dir)
       (add-to-list 'load-path dir))))
 
-;; Hooks
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
-
+(require 'prog-mode-init)
 (require 'env-init)
 (require 'completion-init)
 (require 'org-init)
 (require 'vterm-init)
-(require 'windows)
 (require 'python-init)
 
+
+;; Hooks
+(add-hook 'prog-mode-hook #'my/prog-mode-setup)

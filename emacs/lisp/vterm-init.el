@@ -36,11 +36,18 @@
     (select-window original)))
 
 (defun my/vterm-docker-detach ()
-  "Send C-p C-q to the terminal (Docker detatch)"
+  "Send C-p C-q to the terminal (Docker detach)"
   (interactive)
   (vterm-send-key "p" nil nil t)
   (vterm-send-key "q" nil nil t))
 (defalias 'ddt #'my/vterm-docker-detach)
+
+(defun my/vterm-tmux-detach ()
+  "Send C-b d to the terminal (tmux detach)"
+  (interactive)
+  (vterm-send-key "b" nil nil t)
+  (vterm-send-key "d"))
+(defalias 'tdt #'my/vterm-tmux-detach)
 
 (add-hook 'emacs-startup-hook #'my/startup-vterm-split)
 

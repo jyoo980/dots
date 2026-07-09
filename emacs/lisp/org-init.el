@@ -1,4 +1,6 @@
-;; TAB cycles headings in org buffers (evil normal state)
+(require 'utils)
+
+; TAB cycles headings in org buffers (evil normal state)
 (with-eval-after-load 'org
   (evil-define-key 'normal org-mode-map (kbd "TAB") #'org-cycle))
 
@@ -14,6 +16,19 @@
 
 ;; Set up org-agenda-files
 (setq org-agenda-files '("~/.org/"))
+
+(defun my/count-org-progress-items ()
+  "Return a count of each org progress item"
+  (interactive)
+  (let ((prog-counts (make-hash-table :test 'equal)))
+        (org-map-entries
+         (lambda ()
+           (when-let ((state (org-get-todo-state)))
+             (puthash state (1+ (gethash state prog-counts 0)) prog-counts)))
+         nil
+         'agenda)
+        (my/pretty-print-hash prog-counts)))
+
 
 (defun my/count-org-todos ()
   "Count not-done TODO entries across `org-agenda-files'.
@@ -36,3 +51,4 @@ Reports a per-file breakdown and a total in the echo area."
     total))
 
 (provide 'org-init)
+
