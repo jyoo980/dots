@@ -17,38 +17,52 @@
 ;; Set up org-agenda-files
 (setq org-agenda-files '("~/.org/"))
 
+(defvar my/org-progress-counts-file
+  (expand-file-name "org-progress-counts.eld" (car org-agenda-files))
+  "The file in which previous progress item counts are saved.")
+
+(defun my/read-previous-counts ()
+  "Read the previously-saved counts alist in 'org-progress-counts.eld', or nil."
+  (when (file-readable-p my/org-progress-counts-file)
+    (condition-case nil
+        (with-temp-buffer
+          (insert-file-contents my/org-progress-counts-file)
+          (read (current-buffer)))
+      (error nil))))
+
 (defun my/count-org-progress-items ()
-  "Return a count of each org progress item"
+  "Count entries per TODO state; report counts and diff vs. last run."
   (interactive)
   (let ((prog-counts (make-hash-table :test 'equal)))
-        (org-map-entries
-         (lambda ()
-           (when-let ((state (org-get-todo-state)))
-             (puthash state (1+ (gethash state prog-counts 0)) prog-counts)))
-         nil
-         'agenda)
-        (my/pretty-print-hash prog-counts)))
+    (org-map-entries
+     (lambda ()
+       (when-let ((state (org-get-todo-state)))
+         (puthash state (1+ (gethash state prog-counts 0)) prog-counts)))
+     nil
+     'agenda)
+    (let* ((current-prog-counts (my/sort-alist (my/hash-to-alist prog-counts)))
+           (previous-prog-counts (my/read-previous-counts))
+           (all-prog-states (my/alist-common-cars current-prog-counts previous-prog-counts))
+           (report
+            (mapcar
+             (lambda (state)
+               (let* ((new (or (alist-get state current-prog-counts nil nil #'equal) 0))
+                      (old (or (alist-get state previous-prog-counts nil nil #'equal) 0))
+                      (delta (- new old)))
+                 (format "%s: %d%s" state new
+                         (cond ((or (null previous-prog-counts) (zerop delta)) "")
+                               (t (format " (previously %d)" old))))))
+             (sort all-prog-states #'string<))))
+      (with-temp-file my/org-progress-counts-file
+        (prin1 current-prog-counts (current-buffer)))
+      (message "%s" (string-join report ", "))
+      current-prog-counts)))
 
-
-(defun my/count-org-todos ()
-  "Count not-done TODO entries across `org-agenda-files'.
-Reports a per-file breakdown and a total in the echo area."
+(defun my/open-progress-report ()
+  "Opens the progress-report.txt file in a buffer."
   (interactive)
-  (let ((total 0)
-        (breakdown nil))
-    (dolist (file (org-agenda-files))
-      (if (not (file-readable-p file))
-          (push (format "%s: unreadable" (file-name-nondirectory file))
-                breakdown)
-        (with-current-buffer (find-file-noselect file)
-          (let ((n (length (org-map-entries t "/!" 'file))))
-            (setq total (+ total n))
-            (push (format "%s: %d" (file-name-nondirectory file) n)
-                  breakdown)))))
-    (message "TODOs — %s — total: %d"
-             (string-join (nreverse breakdown) ", ")
-             total)
-    total))
+  (find-file (expand-file-name "progress.txt" (car org-agenda-files))))
+
 
 (provide 'org-init)
 
