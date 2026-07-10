@@ -117,9 +117,12 @@
   (global-diff-hl-mode))
 
 (use-package pdf-tools
-  :ensure t
+  :straight t
+  :mode ("\\.pdf\\'" . pdf-view-mode)
   :config
-  (pdf-tools-install))
+  (pdf-tools-install)
+  (setq pdf-view-use-scaling t
+        pdf-view-use-imagemagick nil))
 
 (use-package eglot
   :straight nil          ; built-in — don't let straight try to fetch it

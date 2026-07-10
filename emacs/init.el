@@ -13,6 +13,9 @@
    backup-directory-alist `((".*" ,my/autosave-dir t))
    lock-file-name-transforms `((".*" ,my/autosave-dir t)))
 
+(setq pdf-info-epdfinfo-program
+      (expand-file-name "straight/repos/pdf-tools/server/epdfinfo" user-emacs-directory))
+
 ;; Local configuration modules live in ~/.emacs.d/lisp, which might include subdirectories.
 ;; Add the directory to `load-path' once, then `require' each module by name.
 
@@ -29,7 +32,20 @@
 (require 'org-init)
 (require 'vterm-init)
 (require 'python-init)
+(require 'file-init)
+(require 'autoinsert)
 
+(auto-insert-mode 1)
+(setq auto-insert-query nil)
 
 ;; Hooks
 (add-hook 'prog-mode-hook #'my/prog-mode-setup)
+(add-hook 'pdf-view-mode-hook #'auto-revert-mode)
+
+;; Lists
+(add-to-list 'display-buffer-alist
+             '("\\*Async Shell Command\\*" display-buffer-no-window))
+(add-to-list 'auto-insert-alist
+             '((emacs-lisp-mode . "Emacs Lisp header")
+               .
+               my/elisp-header))
