@@ -40,7 +40,7 @@
 
 ;; Hooks
 (add-hook 'prog-mode-hook #'my/prog-mode-setup)
-(add-hook 'pdf-view-mode-hook #'auto-revert-mode)
+(add-hook 'pdf-view-mode-hook (lambda () (auto-revert-mode 1)))
 
 ;; Lists
 (add-to-list 'display-buffer-alist
