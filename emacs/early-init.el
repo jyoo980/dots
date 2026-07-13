@@ -128,8 +128,13 @@
   :straight nil          ; built-in — don't let straight try to fetch it
   :hook ((c-mode c-ts-mode python-mode python-ts-mode) . eglot-ensure))
 
+(use-package ghostel
+  :ensure t)
+
 (use-package claude-code-ide
   :straight (:type git :host github :repo "manzaltu/claude-code-ide.el")
   :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
   :config
+  (setq claude-code-ide-terminal-backend 'ghostel)
   (claude-code-ide-emacs-tools-setup)) ; Optionally enable Emacs MCP tools
+

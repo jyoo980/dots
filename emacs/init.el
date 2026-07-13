@@ -30,7 +30,7 @@
 (require 'env-init)
 (require 'completion-init)
 (require 'org-init)
-(require 'vterm-init)
+(require 'term-init)
 (require 'python-init)
 (require 'file-init)
 (require 'autoinsert)
