@@ -1,6 +1,8 @@
 (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
+(push '(ns-transparent-titlebar . t) default-frame-alist)
+(push '(ns-appearance . dark) default-frame-alist)
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -58,10 +60,22 @@
 
 (use-package nerd-icons)
 
-(use-package doom-themes
-  :demand
-  :config
-  (load-theme 'modus-operandi t))
+;; modus-alabaster builds on modus-themes 5.x APIs; Emacs 30's built-in
+;; copy is 4.4, so install the current release (straight puts its build
+;; dir ahead of the built-in on load-path, so 5.x wins the require).
+(use-package modus-themes)
+
+;; Both paths are required: `load-theme' finds the *-theme.el files via
+;; `custom-theme-load-path' (it does NOT search `load-path'), while the
+;; modus-alabaster library those files require resolves via `load-path'.
+(add-to-list 'load-path "~/.emacs.d/modus-alabaster/")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/modus-alabaster/")
+(load-theme 'modus-alabaster-light t)
+
+; (use-package doom-themes
+;   :demand
+;   :config
+;   (load-theme 'modus-operandi t))
 
 (use-package which-key
   :demand
@@ -127,6 +141,7 @@
 (use-package eglot
   :straight nil          ; built-in — don't let straight try to fetch it
   :hook ((c-mode c-ts-mode python-mode python-ts-mode) . eglot-ensure))
+;; Rust's eglot startup is project-gated in lisp/rust-init.el.
 
 (use-package ghostel
   :ensure t)
