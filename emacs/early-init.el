@@ -112,6 +112,14 @@
   ))
 
 
+(use-package transpose-frame
+  :general
+  (leader-keys
+    "w" '(:ignore t :which-key "window")
+    "w <escape>" '(keyboard-escape-quit :which-key t)
+    "w t" '(transpose-frame :which-key "transpose split")
+    "w r" '(rotate-frame-clockwise :which-key "rotate windows")))
+
 (use-package magit
   :general
   (leader-keys
@@ -152,4 +160,12 @@
   :config
   (setq claude-code-ide-terminal-backend 'ghostel)
   (claude-code-ide-emacs-tools-setup)) ; Optionally enable Emacs MCP tools
+
+(use-package markdown-mode
+  :ensure t)
+
+;; Ugly hack for getting columns to show when editing Markdown files
+(add-hook 'markdown-mode-hook (lambda ()
+                                (setq fill-column 100)
+                                (display-fill-column-indicator-mode 1)))
 

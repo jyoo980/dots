@@ -2,7 +2,7 @@
 (scroll-bar-mode -1)           ; Hide the always-visible scrollbar
 (setq inhibit-splash-screen t) ; Remove the "Welcome to GNU Emacs" splash screen
 (setq use-file-dialog nil)     ; Ask for textual confirmation instead of GUI
-(setq-default fill-column 80)          ; Columns should be set to 80
+(setq-default fill-column 80)  ; Columns should be set to 80
 
 
 (defvar my/autosave-dir (expand-file-name "autosave/" user-emacs-directory))
@@ -32,11 +32,13 @@
 (require 'org-init)
 (require 'term-init)
 (require 'python-init)
+(require 'rust-init)
 (require 'file-init)
 (require 'autoinsert)
 
 (auto-insert-mode 1)
 (setq auto-insert-query nil)
+(setq markdown-command "pandoc")
 
 ;; Hooks
 (add-hook 'prog-mode-hook #'my/prog-mode-setup)

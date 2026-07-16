@@ -63,6 +63,17 @@
   (interactive)
   (find-file (expand-file-name "progress.txt" (car org-agenda-files))))
 
+(defun my/org-archive-done-tasks ()
+  "Archive every DONE entry in the current buffer."
+  (interactive)
+  (org-map-entries
+   (lambda ()
+     (org-archive-subtree)
+     ;; Archiving deletes the subtree under point, which shifts every
+     ;; following position; restart the scan from where the entry was.
+     (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
+   "/DONE" 'file))
+
 
 (provide 'org-init)
 

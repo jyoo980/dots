@@ -19,6 +19,13 @@ Stand-in for the old `vterm-toggle' behavior."
   (leader-keys
     "'" '(my/ghostel-toggle :which-key "terminal")))
 
+;; Evil is on globally, so a Ghostel buffer would otherwise open in normal
+;; state, where the buffer is read-only and `C-r' is `evil-redo' (hence the
+;; "buffer is read-only" error). Emacs state lets evil step aside so every
+;; key reaches Ghostel and the shell — C-r reverse-i-search, C-c C-j, etc.
+(with-eval-after-load 'evil
+  (evil-set-initial-state 'ghostel-mode 'emacs))
+
 (with-eval-after-load 'ghostel
   (defun my/ghostel-clear-all ()
     "⌘K semantics: clear screen and scrollback, like iTerm2."
