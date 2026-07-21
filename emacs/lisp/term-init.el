@@ -57,7 +57,6 @@ Stand-in for the old `vterm-toggle' behavior."
 
 (add-hook 'emacs-startup-hook #'my/startup-ghostel-split)
 
-
 (defun my/ghostel-docker-detach ()
   "Send C-p C-q to the terminal (Docker detach)"
   (interactive)

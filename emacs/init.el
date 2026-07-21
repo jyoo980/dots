@@ -34,6 +34,7 @@
 (require 'python-init)
 (require 'rust-init)
 (require 'file-init)
+(require 'windows)
 (require 'autoinsert)
 
 (auto-insert-mode 1)

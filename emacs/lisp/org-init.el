@@ -1,5 +1,7 @@
 (require 'utils)
 
+(defvar advising-meeting-file "advising.org")
+
 ; TAB cycles headings in org buffers (evil normal state)
 (with-eval-after-load 'org
   (evil-define-key 'normal org-mode-map (kbd "TAB") #'org-cycle))
@@ -16,6 +18,14 @@
 
 ;; Set up org-agenda-files
 (setq org-agenda-files '("~/.org/"))
+
+;; Advising meeting notes: `org-capture' (C-c c a) files a dated entry into
+;; advising.org under an auto-maintained year/month/day datetree.
+(setq org-capture-templates
+      (let ((meeting-file (expand-file-name advising-meeting-file (car org-agenda-files))))
+        `(("a" "Advising meeting" entry
+           (file+olp+datetree ,meeting-file)
+           "* Meeting %<%Y-%m-%d>\n** Agenda\n%?\n** Notes\n** Action items\n"))))
 
 (defvar my/org-progress-counts-file
   (expand-file-name "org-progress-counts.eld" (car org-agenda-files))
